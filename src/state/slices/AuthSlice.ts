@@ -17,47 +17,43 @@ export const loginThunk = createAsyncThunk<User, { params: LoginParams }>(
   "user/login",
   async ({ params }, thunkAPI) => {
     try {
-      
       const data = await fetch("https://dummyjson.com/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(params),
       }).then(res => res.json())
-  
+
       if (data.message === "Invalid credentials") {
         throw new Error(data.message)
       }
-      
-      return data
 
+      return data
     } catch (error) {
       return thunkAPI.rejectWithValue(error)
     }
   },
 )
 
-export const signupThunk = createAsyncThunk<User, {params: signupParams}>(
+export const signupThunk = createAsyncThunk<User, { params: signupParams }>(
   "user/signup",
-  async ({params}, thunkAPI) => {
+  async ({ params }, thunkAPI) => {
     try {
-      
       const data = await fetch("https://dummyjson.com/users/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(params),
       }).then(res => res.json())
-      
+
       if (data.message === "Invalid credentials") {
         throw new Error(data.message)
       }
 
       return data
-
     } catch (error) {
       return thunkAPI.rejectWithValue(error)
     }
-  }
-  )
+  },
+)
 
 export const authSlice = createSlice({
   name: "auth",
@@ -66,20 +62,26 @@ export const authSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(loginThunk.fulfilled, (state, action) => {
-        state.authorized = true;
+        state.authorized = true
         state.user = action.payload
-        state.loading = false;
-        debugger
+        state.loading = false
       })
       .addCase(loginThunk.pending, (state, action) => {
-        state.loading = true;
-        debugger
+        state.loading = true
       })
-      .addCase(loginThunk.rejected, (state) => {
-        debugger
-        state.loading = false;
-        state.authorized = false;
-        state.user = null;
+      .addCase(loginThunk.rejected, state => {
+        state.loading = false
+        state.authorized = false
+        state.user = null
+      })
+      .addCase(signupThunk.fulfilled, (state, action) => {
+
+      })
+      .addCase(signupThunk.pending, (state, action) => {
+        state.loading = true
+      })
+      .addCase(signupThunk.rejected, (state, action) => {
+
       })
   },
 })

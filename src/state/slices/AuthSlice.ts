@@ -14,7 +14,7 @@ const initialState: AuthState = {
 }
 
 export const loginThunk = createAsyncThunk<User, { params: LoginParams }>(
-  "user/login",
+  "auth/login",
   async ({ params }, thunkAPI) => {
     try {
       const data = await fetch("https://dummyjson.com/auth/login", {
@@ -34,26 +34,6 @@ export const loginThunk = createAsyncThunk<User, { params: LoginParams }>(
   },
 )
 
-export const signupThunk = createAsyncThunk<User, { params: signupParams }>(
-  "user/signup",
-  async ({ params }, thunkAPI) => {
-    try {
-      const data = await fetch("https://dummyjson.com/users/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(params),
-      }).then(res => res.json())
-
-      if (data.message === "Invalid credentials") {
-        throw new Error(data.message)
-      }
-
-      return data
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error)
-    }
-  },
-)
 
 export const authSlice = createSlice({
   name: "auth",
@@ -74,23 +54,9 @@ export const authSlice = createSlice({
         state.authorized = false
         state.user = null
       })
-      .addCase(signupThunk.fulfilled, (state, action) => {
-
-      })
-      .addCase(signupThunk.pending, (state, action) => {
-        state.loading = true
-      })
-      .addCase(signupThunk.rejected, (state, action) => {
-
-      })
   },
 })
 
 export const userSelector = (state: RootState) => state.auth.user
 export const authorizedSelector = (state: RootState) => state.auth.authorized
 export const authLoadingSelector = (state: RootState) => state.auth.loading
-
-export const {
-  reducer,
-  actions: {},
-} = authSlice

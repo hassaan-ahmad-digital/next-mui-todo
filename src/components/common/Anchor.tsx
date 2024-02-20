@@ -4,13 +4,13 @@ import React from 'react'
 
 type Props = {
   route: string,
-  content: string,
+  children: React.ReactNode
 } & Omit<LinkProps, "href" | "component">
 
-export function Anchor({route, content, ...rest}: Props) {
+export function Anchor({children, route, ...rest}: Props) {
   return (
     <Link href={route} component={NextLink} {...rest}>
-      {content}
+      {children}
     </Link>
   )
 }

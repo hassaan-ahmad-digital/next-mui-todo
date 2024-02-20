@@ -1,16 +1,16 @@
 "use client"
 
+import { Anchor } from "@/components/common"
 import { useAppDispatch, useAppSelector } from "@/state"
-import { authLoadingSelector, loginThunk } from "@/state/slices/AuthSlice"
+import { authLoadingSelector, loginThunk } from "@/state/slices"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { Box, TextField, Typography } from "@mui/material"
 import React, { useState } from "react"
 
 function Login() {
-
   const [loginParams, setLoginParams] = useState<LoginParams>({
-    username: '',
-    password: '',
+    username: "",
+    password: "",
   })
 
   const dispatch = useAppDispatch()
@@ -19,7 +19,7 @@ function Login() {
 
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    dispatch(loginThunk({params: loginParams}))
+    dispatch(loginThunk({ params: loginParams }))
   }
 
   const handleChange =(name: keyof LoginParams) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -52,7 +52,7 @@ function Login() {
           shrink: true,
         }}
         value={loginParams.username}
-        onChange={handleChange('username')}
+        onChange={handleChange("username")}
         variant="standard"
       />
       <TextField
@@ -60,7 +60,7 @@ function Login() {
         label="Password"
         type="password"
         value={loginParams.password}
-        onChange={handleChange('password')}
+        onChange={handleChange("password")}
         InputLabelProps={{
           shrink: true,
         }}
@@ -72,9 +72,14 @@ function Login() {
         variant="contained"
         sx={{ alignSelf: "flex-end", textTransform: "none" }}
       >
-
         Log In
       </LoadingButton>
+      <Typography variant="overline" textAlign="center">
+        Not Registered?{" "}
+        <Anchor sx={{ fontWeight: 600 }} route="/signup">
+          Sign Up
+        </Anchor>
+      </Typography>
     </Box>
   )
 }

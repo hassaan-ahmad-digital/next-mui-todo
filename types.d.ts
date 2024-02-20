@@ -14,7 +14,7 @@ type User = {
   username: string
 }
 
-type signupParams = {
+type SignupParams = {
   firstName: string,
   lastName: string,
   username: string,

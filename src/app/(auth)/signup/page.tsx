@@ -1,15 +1,18 @@
 "use client"
 
+import { Anchor } from "@/components/common"
 import { useAppDispatch, useAppSelector } from "@/state"
-import { authLoadingSelector, loginThunk } from "@/state/slices/AuthSlice"
+import { authLoadingSelector, createUser } from "@/state/slices"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { Box, TextField, Typography } from "@mui/material"
 import React, { useState } from "react"
 
 function Login() {
-  const [loginParams, setLoginParams] = useState<LoginParams>({
+  const [signupParams, setSignupParams] = useState<SignupParams>({
     username: "",
     password: "",
+    firstName: "",
+    lastName: "",
   })
 
   const dispatch = useAppDispatch()
@@ -18,12 +21,13 @@ function Login() {
 
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    dispatch(loginThunk({ params: loginParams }))
+    dispatch(createUser({ params: signupParams }))
   }
 
   const handleChange =
-    (name: keyof LoginParams) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      setLoginParams(prev => ({ ...prev, [name]: e.target.value }))
+    (name: keyof SignupParams) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setSignupParams(prev => ({ ...prev, [name]: e.target.value }))
     }
 
   return (
@@ -43,15 +47,35 @@ function Login() {
           fontWeight: "500",
         }}
       >
-        Log In
+        Sign Up
       </Typography>
+      <TextField
+        id="firstName"
+        label="First Name"
+        InputLabelProps={{
+          shrink: true,
+        }}
+        value={signupParams.firstName}
+        onChange={handleChange("firstName")}
+        variant="standard"
+      />
+      <TextField
+        id="lastName"
+        label="Last Name"
+        InputLabelProps={{
+          shrink: true,
+        }}
+        value={signupParams.lastName}
+        onChange={handleChange("lastName")}
+        variant="standard"
+      />
       <TextField
         id="username"
         label="Username"
         InputLabelProps={{
           shrink: true,
         }}
-        value={loginParams.username}
+        value={signupParams.username}
         onChange={handleChange("username")}
         variant="standard"
       />
@@ -59,7 +83,7 @@ function Login() {
         id="login-passwords"
         label="Password"
         type="password"
-        value={loginParams.password}
+        value={signupParams.password}
         onChange={handleChange("password")}
         InputLabelProps={{
           shrink: true,
@@ -72,8 +96,14 @@ function Login() {
         variant="contained"
         sx={{ alignSelf: "flex-end", textTransform: "none" }}
       >
-        Log In
+        Register
       </LoadingButton>
+      <Typography variant="overline" textAlign="center">
+        Already Registered?{" "}
+        <Anchor sx={{ fontWeight: 600 }} route="/login">
+          Log In
+        </Anchor>
+      </Typography>
     </Box>
   )
 }

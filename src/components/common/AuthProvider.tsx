@@ -1,7 +1,7 @@
 "use client"
 
 import { useAppSelector } from '@/state'
-import { authorizedSelector } from '@/state/slices/AuthSlice'
+import { authorizedSelector } from '@/state/slices'
 import { usePathname, useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
 

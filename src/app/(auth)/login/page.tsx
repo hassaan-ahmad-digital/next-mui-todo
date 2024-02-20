@@ -2,10 +2,10 @@
 
 import { Anchor } from "@/components/common"
 import { useAppDispatch, useAppSelector } from "@/state"
-import { authLoadingSelector, loginThunk } from "@/state/slices"
+import { authLoadingSelector, loginThunk, userActions, userCreatedSelector } from "@/state/slices"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { Box, TextField, Typography } from "@mui/material"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 
 function Login() {
   const [loginParams, setLoginParams] = useState<LoginParams>({
@@ -16,6 +16,7 @@ function Login() {
   const dispatch = useAppDispatch()
 
   const loading = useAppSelector(authLoadingSelector)
+  const userCreated = useAppSelector(userCreatedSelector)
 
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -25,6 +26,12 @@ function Login() {
   const handleChange =(name: keyof LoginParams) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setLoginParams(prev => ({...prev, [name]: e.target.value}))
   }
+
+  useEffect(() => {
+    if (userCreated) {
+      dispatch(userActions.clearUser())
+    }
+  }, [userCreated])
 
   return (
     <Box

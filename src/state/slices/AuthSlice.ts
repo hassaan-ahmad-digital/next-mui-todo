@@ -17,7 +17,7 @@ export const loginThunk = createAsyncThunk<User, { params: LoginParams }>(
   "auth/login",
   async ({ params }, thunkAPI) => {
     try {
-      const data = await fetch("https://dummyjson.com/auth/login", {
+      const data = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(params),
@@ -35,7 +35,7 @@ export const loginThunk = createAsyncThunk<User, { params: LoginParams }>(
 )
 
 
-export const authSlice = createSlice({
+const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {},
@@ -60,3 +60,8 @@ export const authSlice = createSlice({
 export const userSelector = (state: RootState) => state.auth.user
 export const authorizedSelector = (state: RootState) => state.auth.authorized
 export const authLoadingSelector = (state: RootState) => state.auth.loading
+
+export const {
+  reducer: authReducer,
+  actions: authActions,
+} = authSlice

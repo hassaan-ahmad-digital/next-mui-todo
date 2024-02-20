@@ -2,12 +2,13 @@
 
 import { Anchor } from "@/components/common"
 import { useAppDispatch, useAppSelector } from "@/state"
-import { authLoadingSelector, createUser } from "@/state/slices"
+import { createUser, userCreatedSelector, userLoadingStateSelector } from "@/state/slices"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { Box, TextField, Typography } from "@mui/material"
-import React, { useState } from "react"
+import { useRouter } from "next/navigation"
+import React, { useEffect, useState } from "react"
 
-function Login() {
+function Signup() {
   const [signupParams, setSignupParams] = useState<SignupParams>({
     username: "",
     password: "",
@@ -15,11 +16,14 @@ function Login() {
     lastName: "",
   })
 
+  const router = useRouter()
+
   const dispatch = useAppDispatch()
 
-  const loading = useAppSelector(authLoadingSelector)
+  const loading = useAppSelector(userLoadingStateSelector)
+  const userCreated = useAppSelector(userCreatedSelector)
 
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSignup = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     dispatch(createUser({ params: signupParams }))
   }
@@ -30,6 +34,12 @@ function Login() {
       setSignupParams(prev => ({ ...prev, [name]: e.target.value }))
     }
 
+  useEffect(() => {
+    if (userCreated) {
+      router.push("/login")
+    }
+  }, [userCreated])
+  
   return (
     <Box
       component="form"
@@ -38,7 +48,7 @@ function Login() {
         flexDirection: "column",
         gap: "1rem",
       }}
-      onSubmit={handleLogin}
+      onSubmit={handleSignup}
     >
       <Typography
         component="h1"
@@ -108,4 +118,4 @@ function Login() {
   )
 }
 
-export default Login
+export default Signup
